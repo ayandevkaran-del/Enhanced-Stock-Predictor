@@ -4,3 +4,4 @@ requests
 pandas
 yfinance
 pandas-ta
+torch
