@@ -2,10 +2,5 @@ streamlit
 plotly
 requests
 pandas
-numpy
-fastapi
-uvicorn
 yfinance
-scikit-learn
-tensorflow
-keras
+pandas-ta
