@@ -1,0 +1,8 @@
+﻿.env
+models/*.pt
+models/*.pkl
+models/*.npy
+data/
+*.csv
+__pycache__/
+*.pyc

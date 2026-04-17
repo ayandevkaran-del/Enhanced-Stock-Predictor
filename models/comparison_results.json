@@ -1,0 +1,112 @@
+{
+  "TCS": {
+    "RNN": {
+      "accuracy": 0.5692,
+      "f1": 0.4792
+    },
+    "CNN": {
+      "accuracy": 0.6103,
+      "f1": 0.5818
+    },
+    "LSTM": {
+      "accuracy": 0.5897,
+      "f1": 0.4984
+    },
+    "BiLSTM": {
+      "accuracy": 0.5692,
+      "f1": 0.413
+    },
+    "BiLSTM_Attention": {
+      "accuracy": 0.5949,
+      "f1": 0.5943
+    }
+  },
+  "Infosys": {
+    "RNN": {
+      "accuracy": 0.5436,
+      "f1": 0.4526
+    },
+    "CNN": {
+      "accuracy": 0.5436,
+      "f1": 0.5187
+    },
+    "LSTM": {
+      "accuracy": 0.5487,
+      "f1": 0.5433
+    },
+    "BiLSTM": {
+      "accuracy": 0.5744,
+      "f1": 0.5173
+    },
+    "BiLSTM_Attention": {
+      "accuracy": 0.5128,
+      "f1": 0.4573
+    }
+  },
+  "Wipro": {
+    "RNN": {
+      "accuracy": 0.5282,
+      "f1": 0.4863
+    },
+    "CNN": {
+      "accuracy": 0.5538,
+      "f1": 0.535
+    },
+    "LSTM": {
+      "accuracy": 0.5538,
+      "f1": 0.4607
+    },
+    "BiLSTM": {
+      "accuracy": 0.5385,
+      "f1": 0.4198
+    },
+    "BiLSTM_Attention": {
+      "accuracy": 0.5692,
+      "f1": 0.5666
+    }
+  },
+  "HCLTech": {
+    "RNN": {
+      "accuracy": 0.5692,
+      "f1": 0.569
+    },
+    "CNN": {
+      "accuracy": 0.5692,
+      "f1": 0.5617
+    },
+    "LSTM": {
+      "accuracy": 0.5744,
+      "f1": 0.5743
+    },
+    "BiLSTM": {
+      "accuracy": 0.559,
+      "f1": 0.5581
+    },
+    "BiLSTM_Attention": {
+      "accuracy": 0.5538,
+      "f1": 0.5394
+    }
+  },
+  "TechM": {
+    "RNN": {
+      "accuracy": 0.5077,
+      "f1": 0.4888
+    },
+    "CNN": {
+      "accuracy": 0.4923,
+      "f1": 0.3248
+    },
+    "LSTM": {
+      "accuracy": 0.5179,
+      "f1": 0.5089
+    },
+    "BiLSTM": {
+      "accuracy": 0.5538,
+      "f1": 0.5258
+    },
+    "BiLSTM_Attention": {
+      "accuracy": 0.5744,
+      "f1": 0.5637
+    }
+  }
+}
