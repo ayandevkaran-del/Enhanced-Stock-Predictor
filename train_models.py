@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score, f1_score
 import os
 import json
 
-# ── Config ──
+
 STOCKS = ["TCS", "Infosys", "Wipro", "HCLTech", "TechM"]
 EPOCHS = 30
 BATCH_SIZE = 32
@@ -16,9 +16,7 @@ print(f"Using device: {DEVICE}")
 
 os.makedirs("models", exist_ok=True)
 
-# ════════════════════════════════════════
-# MODEL DEFINITIONS
-# ════════════════════════════════════════
+
 
 class RNNModel(nn.Module):
     def __init__(self, input_size, hidden_size=64):
@@ -114,9 +112,7 @@ class BiLSTMAttentionModel(nn.Module):
         return self.fc(out)
 
 
-# ════════════════════════════════════════
-# TRAINING FUNCTION
-# ════════════════════════════════════════
+
 
 def train_model(model, X_train, y_train, X_test, y_test, model_name, stock_name):
     # Convert to tensors
@@ -125,7 +121,7 @@ def train_model(model, X_train, y_train, X_test, y_test, model_name, stock_name)
     X_te = torch.FloatTensor(X_test).to(DEVICE)
     y_te = torch.LongTensor(y_test).to(DEVICE)
 
-    # DataLoader
+    
     dataset = TensorDataset(X_tr, y_tr)
     loader  = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=False)
 
@@ -152,7 +148,7 @@ def train_model(model, X_train, y_train, X_test, y_test, model_name, stock_name)
             optimizer.step()
             total_loss += loss.item()
 
-        # Evaluate
+        
         model.eval()
         with torch.no_grad():
             test_out = model(X_te)
@@ -170,7 +166,7 @@ def train_model(model, X_train, y_train, X_test, y_test, model_name, stock_name)
         if (epoch + 1) % 10 == 0:
             print(f"    Epoch {epoch+1}/{EPOCHS} | Loss: {total_loss:.4f} | Acc: {acc:.4f}")
 
-    # Final evaluation with best model
+    
     model.load_state_dict(torch.load(f"models/{stock_name}_{model_name}.pt"))
     model.eval()
     with torch.no_grad():
@@ -185,9 +181,7 @@ def train_model(model, X_train, y_train, X_test, y_test, model_name, stock_name)
     return {"accuracy": round(final_acc, 4), "f1": round(final_f1, 4)}
 
 
-# ════════════════════════════════════════
-# MAIN — TRAIN ALL MODELS FOR ALL STOCKS
-# ════════════════════════════════════════
+
 
 all_results = {}
 
@@ -196,7 +190,7 @@ for stock in STOCKS:
     print(f"TRAINING MODELS FOR: {stock}")
     print(f"{'='*50}")
 
-    # Load data
+    
     X_train = np.load(f"models/{stock}_X_train.npy")
     X_test  = np.load(f"models/{stock}_X_test.npy")
     y_train = np.load(f"models/{stock}_y_train.npy")
@@ -207,7 +201,7 @@ for stock in STOCKS:
 
     stock_results = {}
 
-    # Define all 5 models
+    
     models_to_train = {
         "RNN":              RNNModel(input_size),
         "CNN":              CNNModel(input_size),
@@ -226,11 +220,11 @@ for stock in STOCKS:
 
     all_results[stock] = stock_results
 
-# ── Save results ──
+
 with open("models/comparison_results.json", "w") as f:
     json.dump(all_results, f, indent=2)
 
-# ── Print comparison table ──
+
 print("\n" + "="*70)
 print("FINAL COMPARISON RESULTS")
 print("="*70)
