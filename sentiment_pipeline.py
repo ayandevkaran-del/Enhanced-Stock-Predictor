@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from transformers import AutoTokenizer, AutoModel
 import torch
 
-# ── Config ──
+
 from dotenv import load_dotenv
 import os
 
@@ -24,7 +24,7 @@ STOCKS = {
 
 os.makedirs("data", exist_ok=True)
 
-# ── Load FinBERT ──
+
 print("Loading FinBERT model...")
 tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
 model = AutoModel.from_pretrained("ProsusAI/finbert")
@@ -32,7 +32,7 @@ model.eval()
 print("FinBERT loaded!")
 
 def get_embedding(text):
-    # Convert headline to 768-dim embedding vector
+    
     inputs = tokenizer(
         text,
         return_tensors="pt",
@@ -42,27 +42,26 @@ def get_embedding(text):
     )
     with torch.no_grad():
         outputs = model(**inputs)
-    # Use CLS token embedding as sentence representation
+    
     embedding = outputs.last_hidden_state[:, 0, :].squeeze().numpy()
     return embedding
 
 def apply_attention(embeddings):
-    # Simple self-attention: score each headline by its relevance
-    # Headlines with stronger signals get higher weight
+    
     if len(embeddings) == 0:
         return np.zeros(768)
     
     embeddings = np.array(embeddings)
     
-    # Compute attention scores using dot product with mean
+   
     mean_vec = embeddings.mean(axis=0)
     scores = embeddings @ mean_vec
     
-    # Softmax to get weights
+    
     scores = scores - scores.max()
     weights = np.exp(scores) / np.exp(scores).sum()
     
-    # Weighted sum of embeddings
+    
     attended = (embeddings * weights[:, None]).sum(axis=0)
     return attended
 
@@ -90,7 +89,7 @@ def fetch_news(query):
 def process_stock_sentiment(stock_name, query):
     print(f"\nProcessing sentiment for {stock_name}...")
 
-    # Fetch news
+    
     articles = fetch_news(query)
     print(f"  Fetched {len(articles)} articles")
 
@@ -98,7 +97,7 @@ def process_stock_sentiment(stock_name, query):
         print(f"  No articles found, skipping...")
         return None
 
-    # Get embeddings for each headline
+    
     embeddings = []
     headlines = []
 
@@ -114,10 +113,10 @@ def process_stock_sentiment(stock_name, query):
     if len(embeddings) == 0:
         return None
 
-    # Apply attention
+    
     attended_vector = apply_attention(embeddings)
 
-    # Reduce to summary stats we can store in CSV
+    
     sentiment_features = {
         "sentiment_mean":   float(attended_vector.mean()),
         "sentiment_std":    float(attended_vector.std()),
@@ -142,15 +141,13 @@ def add_sentiment_to_csv(stock_name, sentiment_features):
 
     df = pd.read_csv(csv_path, index_col=0)
 
-    # Add sentiment columns to all rows (current sentiment applied globally)
-    # In production this would be date-aligned — for now we add as constant features
+    
     for key, value in sentiment_features.items():
         df[key] = value
 
     df.to_csv(csv_path)
     print(f"  Updated {csv_path} with sentiment features")
 
-# ── Run for all stocks ──
 results = {}
 
 for stock_name, query in STOCKS.items():
@@ -161,7 +158,6 @@ for stock_name, query in STOCKS.items():
         results[stock_name] = sentiment_features
         add_sentiment_to_csv(stock_name, sentiment_features)
 
-    # Wait between API calls to avoid rate limiting
     time.sleep(2)
 
 print("\n" + "="*50)
