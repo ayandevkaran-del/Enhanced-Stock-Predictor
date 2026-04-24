@@ -7,14 +7,13 @@ import yfinance as yf
 import time
 from datetime import datetime
 
-# ── Page Config ──
+
 st.set_page_config(
     page_title="Stock Prediction Dashboard",
     page_icon="📈",
     layout="wide"
 )
 
-# ── Styling ──
 st.markdown("""
 <style>
     .main { background-color: #0D1B2A; }
@@ -66,7 +65,6 @@ STOCKS = {
     "TechM":   "TECHM.NS"
 }
 
-# ── Helper Functions ──
 def get_prediction(stock):
     try:
         r = requests.get(f"{API_URL}/predict/{stock}", timeout=30)
@@ -203,12 +201,12 @@ def plot_model_comparison():
     except:
         return None
 
-# ── MAIN DASHBOARD ──
+
 st.title("📈 Enhanced Stock Market Prediction System")
 st.markdown("**Indian IT Sector — NSE India | BiLSTM + Transformer Attention**")
 st.markdown("---")
 
-# Sidebar
+
 st.sidebar.title("⚙️ Controls")
 selected_stock = st.sidebar.selectbox("Select Stock", list(STOCKS.keys()))
 period = st.sidebar.selectbox("Chart Period", ["1mo", "3mo", "6mo", "1y"], index=1)
@@ -222,7 +220,7 @@ st.sidebar.markdown("**About:**")
 st.sidebar.markdown("BiLSTM + Transformer Attention model trained on 5 years of NSE data")
 st.sidebar.markdown("Supervisor: Ms. Neetu Sardana")
 
-# ── SECTION 1: All Signals Overview ──
+
 st.subheader("🎯 Live Signals — All 5 IT Stocks")
 
 with st.spinner("Fetching predictions..."):
@@ -249,7 +247,7 @@ if all_preds:
 
 st.markdown("---")
 
-# ── SECTION 2: Detailed Stock View ──
+
 st.subheader(f"📊 Detailed View — {selected_stock}")
 
 col1, col2 = st.columns([2, 1])
@@ -280,7 +278,7 @@ with col2:
         st.metric("MACD", f"{pred['macd']}")
         st.metric("Timestamp", pred['timestamp'])
 
-        # RSI interpretation
+        
         rsi_val = pred['rsi']
         if rsi_val > 70:
             st.warning("⚠️ RSI > 70 — Overbought zone")
@@ -289,7 +287,7 @@ with col2:
         else:
             st.info("ℹ️ RSI in neutral zone (30-70)")
 
-# ── SECTION 3: Technical Indicators ──
+
 st.markdown("---")
 st.subheader("📉 Technical Indicators")
 
@@ -302,7 +300,7 @@ with col4:
     if not df_history.empty:
         st.plotly_chart(plot_macd(df_history), use_container_width=True)
 
-# ── SECTION 4: Model Comparison ──
+
 st.markdown("---")
 st.subheader("🏆 Model Comparison — Directional Accuracy")
 
@@ -310,7 +308,7 @@ fig_comparison = plot_model_comparison()
 if fig_comparison:
     st.plotly_chart(fig_comparison, use_container_width=True)
 
-# ── SECTION 5: All Predictions Table ──
+
 st.markdown("---")
 st.subheader("📋 All Predictions Summary")
 
@@ -331,7 +329,7 @@ if all_preds:
     df_table = pd.DataFrame(table_data)
     st.dataframe(df_table, use_container_width=True, hide_index=True)
 
-# Auto refresh
+
 if auto_refresh:
     time.sleep(30)
     st.rerun()
